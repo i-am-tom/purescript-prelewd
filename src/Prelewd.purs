@@ -10,7 +10,13 @@ import Data.Functor (map)
 import Data.NaturalTransformation (NaturalTransformation)
 import Data.Semigroup (append)
 import Data.Show (class Show)
+import Data.Pair (Pair(..))
+import Data.Tuple (Tuple(..))
 import Debug.Trace (traceShow)
+import Data.Functor.Contravariant (cmap)
+import Data.Void (absurd)
+import Data.Lens.Iso (Iso', iso)
+import Partial.Unsafe (unsafePartial)
 
 -- | I've chosen a train as you might thing of it as the second thing going
 -- | through a "magic tunnel" that transforms its passengers. Bear with me: this
@@ -98,13 +104,21 @@ infixl 3 alt as 🔗
 -- | we can cheat a little bit, and use some escape hatches in the `Debug`
 -- | package, including `traceShow`, which will log anything `Show`able. With
 -- | this function, we can show a value at any point, and return anything!
-investigate :: forall a b. Show a => a -> b -> b
+investigate :: forall a b. Warn "Debug.Trace usage" => Show a => a -> b -> b
 investigate x y = traceShow x 💨 const y
 
 -- | For example, if we have `f x` and want to know what `x` is, we can write
 -- | `x 🔍 f x`. This will return the same value as `f x`, but also print the
 -- | `x` value (sneaky-like) to the console for us to look at.
 infixl 8 investigate as 🔍
+
+-- | Be careful with this! It's a function never to be called, what would you
+-- | call it with, since there are no values of type `Void`.
+infix 9 absurd as 💣
+
+-- | Sometimes you need to tell the compiler that you're being careful, and
+-- | that's okay too. I see nothing wrong with using `Partial` functions!
+infix 1 unsafePartial as 🙈
 
 -- | Not only can we compose functions, but also functors! Maybe we want a list
 -- | of `Maybe` values, or an `Aff` of a function. Whatever it is, we can write
@@ -123,8 +137,22 @@ infixr 9 type Compose as 🍔
 -- | problems, and `Right` to carry success. `Error 🆚 Result`, if you like.
 infixl 3 type Either as 🆚
 
--- | `Pair` holds two values of the same type. A *twin* of values, if you like.
-data Pair a = Pair a a
-
--- | The most famous twin of all.
+-- | `Pair` bundles two values of the same type together. Name a more famous
+-- | twin ... I'll wait.
 infixl 3 Pair as ♊
+
+-- | `Tuple` takes two arguments and bundles them together, always together,
+-- | both in the type and in the value.
+infixl 3 Tuple as 👫
+infixl 3 type Tuple as 👫
+
+-- | Make a value presentable! For `Contravariant` functors require a value, and
+-- | you need to map over them "backwards" (`(b -> a) -> f a -> f b`), in order
+-- | to wrap up a value for them correctly. Think of it like an argument to a
+-- | function.
+infixl 9 cmap as 💄
+
+-- | Equivalent things can be exchanged for each other. Like currency! This is
+-- | called an isomorphism, see Data.Lens.Iso. Swap an `a` for a `b` anytime!
+infix 1 iso as 💱
+infix 1 type Iso' as 💱
