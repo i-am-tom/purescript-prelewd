@@ -112,12 +112,15 @@ investigate x y = traceShow x 💨 const y
 -- | `x` value (sneaky-like) to the console for us to look at.
 infixl 8 investigate as 🔍
 
--- | Be careful with this! It's a function never to be called, what would you
--- | call it with, since there are no values of type `Void`.
+-- | Be careful with this! It's a function never to be called. Anyway, since
+-- | there are no values of type `Void`, what would you even call it with?
 infix 9 absurd as 💣
 
--- | Sometimes you need to tell the compiler that you're being careful, and
--- | that's okay too. I see nothing wrong with using `Partial` functions!
+-- | Sometimes you need to tell the compiler that you know what you're doing,
+-- | even though it might not be obvious. That's OK! Maybe you _know_ you have
+-- | a `Just` value: `fromJust 🙈 Just 2` will get you that 2 with no trouble!
+-- | Beware, though: if you're wrong, PureScript won't save you from runtime
+-- | errors!
 infix 1 unsafePartial as 🙈
 
 -- | Not only can we compose functions, but also functors! Maybe we want a list
@@ -146,10 +149,12 @@ infixl 3 Pair as ♊
 infixl 3 Tuple as 👫
 infixl 3 type Tuple as 👫
 
--- | Make a value presentable! For `Contravariant` functors require a value, and
--- | you need to map over them "backwards" (`(b -> a) -> f a -> f b`), in order
--- | to wrap up a value for them correctly. Think of it like an argument to a
--- | function.
+-- | Make a value presentable! `Contravariant` functors are usually of the form
+-- | `F a = a -> X`, where `X` is some fixed type like `Boolean`. When we do a
+-- | `cmap`, we say, "I don't have an `a`, but I _do_ have a way to _get to_
+-- | `a` from `b`, and we can therefore have an `F b = b -> x`. In a sense, we
+-- | need a way to make the value look suitable. What better way to make oneself
+-- | presentable than to put on some lipstick?
 infixl 9 cmap as 💄
 
 -- | Equivalent things can be exchanged for each other. Like currency! This is
