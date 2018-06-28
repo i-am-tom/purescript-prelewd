@@ -7,16 +7,17 @@ import Control.Semigroupoid (compose, composeFlipped)
 import Data.Either (Either)
 import Data.Function (apply, const)
 import Data.Functor (map)
+import Data.Functor.Contravariant (cmap)
+import Data.Lens.Iso (Iso', iso)
 import Data.NaturalTransformation (NaturalTransformation)
+import Data.Pair (Pair(..))
 import Data.Semigroup (append)
 import Data.Show (class Show)
-import Data.Pair (Pair(..))
 import Data.Tuple (Tuple(..))
-import Debug.Trace (traceShow)
-import Data.Functor.Contravariant (cmap)
 import Data.Void (absurd)
-import Data.Lens.Iso (Iso', iso)
+import Debug.Trace (trace)
 import Partial.Unsafe (unsafePartial)
+import Prim.TypeError (class Warn, Text)
 
 -- | I've chosen a train as you might thing of it as the second thing going
 -- | through a "magic tunnel" that transforms its passengers. Bear with me: this
@@ -104,8 +105,8 @@ infixl 3 alt as 🔗
 -- | we can cheat a little bit, and use some escape hatches in the `Debug`
 -- | package, including `traceShow`, which will log anything `Show`able. With
 -- | this function, we can show a value at any point, and return anything!
-investigate :: forall a b. Warn "Debug.Trace usage" => Show a => a -> b -> b
-investigate x y = traceShow x 💨 const y
+investigate :: forall a b. Warn (Text "Debug.Trace usage") => Show a => a -> b -> b
+investigate x y = trace x 💨 const y
 
 -- | For example, if we have `f x` and want to know what `x` is, we can write
 -- | `x 🔍 f x`. This will return the same value as `f x`, but also print the
